@@ -6,47 +6,60 @@ from signLanguage.entity.config_entity import DataValidationConfig
 from signLanguage.entity.artifact_entity import (DataIngestionArtifact, DataValidationArtifact)
 
 
-
 class DataValidation:
-    def __init__(self, 
-                 data_ingestion_artifact : DataIngestionArtifact,
-                 data_validation_config : DataValidationConfig
-                 ):
-        try:
-            self.data_ingestion_artifact = data_ingestion_artifact,
-            self.data_validation_config = data_validation_config
-
-        except Exception as e:
-            raise SignException(e,sys)
-        
-
-    def validate_all_files_exist(self)-> bool:
-
-        try:
-            validation_status = None
+     
+        def __init__(self,
+                     data_ingestion_artifact : DataIngestionArtifact,
+                     data_validation_config : DataValidationConfig):
             
-            all_files = os.listdir(self.data_ingestion_artifact.feature_store_path)
+            try:
+                self.data_ingestion_artifact = data_ingestion_artifact
+                self.data_validation_config = data_validation_config
+
+            except Exception as e:
+                raise SignException(e,sys)
             
-            for file in all_files:
-                if file not in self.data_validation_config.required_file_list:
-                    validation_status = False
-                    os.makedirs(self.data_validation_config.data_validation_dir, exist_ok= True)
-                    with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
-                        f.write(f"Validation status : {validation_status}")
 
-                else:
+        def validate_all_files_exist(self)-> bool:
 
-                    validation_status = True
-                    os.makedirs(self.data_validation_config.data_validation_dir, exist_ok= True)
-                    with open(self.data_validation_config.valid_status_file_dir,'w') as f:
-                        f.writable(f"Validation status : {validation_status}")
+            try:
+                validation_status = None
+                
+                all_files = os.listdir(self.data_ingestion_artifact.feature_store_path)
+                
+                for file in all_files:
+                    if file not in self.data_validation_config.required_file_list:
+                        validation_status = False
+                        os.makedirs(self.data_validation_config.data_validation_dir, exist_ok= True)
+                        with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
+                            f.write(f"Validation status : {validation_status}")
 
-            return validation_status
+                    else:
 
-        except Exception as e:
-            raise SignException(e,sys)
-        
+                        validation_status = True
+                        os.makedirs(self.data_validation_config.data_validation_dir, exist_ok= True)
+                        with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
+                            f.write(f"Validation status : {validation_status}")
 
-    def initiate_data_validation(self) -> DataValidationArtifact:
+                return validation_status
 
-        logging.info("Entered initiate Data")
+            except Exception as e:
+                raise SignException(e,sys)
+            
+
+        def initiate_data_validation(self) -> DataValidationArtifact:
+            logging.info("Entered initiate_data_validation method of Data validation class")
+            try:
+                status = self.validate_all_files_exist()
+                data_validation_artifact = DataValidationArtifact(validation_status= status)
+
+                logging.info("Exited initiate_data_validation method of Data validation class")
+                logging.info(f"Data validaiton artifact : {data_validation_artifact}")
+
+                if status:
+                    shutil.copy(self.data_ingestion_artifact.data_zip_file_path, os.getcwd())
+
+                return data_validation_artifact
+
+            except Exception as e:
+                raise SignException(e,sys)

@@ -36,4 +36,4 @@ class DataValidationConfig:
         data_validation_dir, DATA_VALIDATION_STATUS_FILE
     )
 
-    required_file_list : str = DATA_VALIDATION_ALL_REQUIRED_FILES
+    required_file_list = DATA_VALIDATION_ALL_REQUIRED_FILES
