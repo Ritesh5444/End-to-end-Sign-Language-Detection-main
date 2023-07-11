@@ -23,3 +23,17 @@ DATA_VALIDATION_STATUS_FILE = "status.txt"
 
 DATA_VALIDATION_ALL_REQUIRED_FILES  =  ["train", "test", "data.yaml"]
 
+
+
+"""
+Model trainer related constant start with MODEL_TRAINER var name
+"""
+
+MODEL_TRAINER_DIR_NAME : str = "model_trainer"
+
+MODEL_TRAINER_PRETRAINED_WEIGHT_NAME : str  ="yolov5s.pt"
+
+MODEL_TRAINER_NO_EPOCHS : int = 2
+
+MODEL_TRAINER_BATCH_SIZE : int = 16
+
