@@ -13,5 +13,5 @@ class DataValidationArtifact:
     
 @dataclass
 
-class ModelTrainerArtifact :
+class ModelTrainerArtifact:
     trained_model_file_path : str

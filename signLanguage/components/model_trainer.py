@@ -5,7 +5,7 @@ from signLanguage.logger import logging
 from signLanguage.exception import SignException
 from signLanguage.entity.config_entity import ModelTrainerConfig
 from signLanguage.entity.artifact_entity import ModelTrainerArtifact
-
+import shutil
 
 class ModelTrainer:
     
@@ -37,14 +37,18 @@ class ModelTrainer:
                 yaml.dump(config, f)
 
             os.system(f"cd yolov5/ && python train.py --img 416 --batch {self.model_trainer_config.batch_size} --epochs {self.model_trainer_config.no_epochs} --data ../data.yaml --cfg ./models/custom_yolov5s.yaml --weights {self.model_trainer_config.weight_name} --name yolov5s_results  --cache")
-            os.system("cp yolov5/runs/train/yolov5s_results/weights/best.pt yolov5/")
+           # os.system("cp yolov5/runs/train/yolov5s_results/weights/best.pt yolov5/")
             os.makedirs(self.model_trainer_config.model_trainer_dir, exist_ok=True)
-            os.system(f"cp yolov5/runs/train/yolov5s_results/weights/best.pt {self.model_trainer_config.model_trainer_dir}/")
-
+            #os.system(f"cp yolov5/runs/train/yolov5s_results/weights/best.pt {self.model_trainer_config.model_trainer_dir}/")
+            shutil.copy("yolov5/runs/train/yolov5s_results/weights/best.pt", self.model_trainer_config.model_trainer_dir)
             os.system("rm -rf yolov5/runs")
             os.system("rm -rf train")
             os.system("rm -rf test")
             os.system("rm -rf data.yaml")
+            #os.remove("yolov5/runs")
+            #os.remove("train")
+            #os.remove("test")
+            #os.remove("data.yaml")
 
             model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path="yolov5/best.pt")
 

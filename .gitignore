@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 artifacts/*
 Sign_language_data.zip
+yolov5/runs
+train
+test
